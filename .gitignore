@@ -1,0 +1,22 @@
+# Virtual environment
+mdenv/
+.venv/
+venv/
+
+# PyCharm
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Model files
+# Keep if your evaluator needs the trained model:
+# src/models/model_pipeline.pkl
+
+# Environment files
+.env
