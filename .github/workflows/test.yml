@@ -22,8 +22,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Check project structure
+        run: |
+          pwd
+          ls -la
+          ls -la app
+          python -c "import os; print(os.getcwd())"
+          python -c "import sys; print(sys.path)"
+          python -c "import app; print(app.__file__)"
+
       - name: Run tests
         env:
-          PYTHONPATH: .
+          PYTHONPATH: ${{ github.workspace }}
         run: |
-          pytest -v
+          python -m pytest -v
