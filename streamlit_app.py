@@ -1,16 +1,44 @@
 import streamlit as st
-import requests
+import pandas as pd
+import joblib
+from pathlib import Path
+
+
+# --------------------------------------------------
+# Page configuration
+# --------------------------------------------------
 
 st.set_page_config(
     page_title="Medical Appointment No-Show Prediction",
-    page_icon="🏥"
+    page_icon="🏥",
+    layout="centered"
 )
 
-st.title("🏥 Medical Appointment No-Show Prediction")
-st.write("Enter the patient's appointment details to predict whether the patient is likely to miss the appointment.")
 
-# FastAPI URL
-API_URL = "http://localhost:8000/predict"
+# --------------------------------------------------
+# Load trained model
+# --------------------------------------------------
+
+MODEL_PATH = Path(__file__).parent / "src" / "models" / "model_pipeline.pkl"
+
+model = joblib.load(MODEL_PATH)
+
+
+# --------------------------------------------------
+# Title
+# --------------------------------------------------
+
+st.title("🏥 Medical Appointment No-Show Prediction")
+
+st.write(
+    "Enter the patient's appointment details to predict "
+    "whether the patient is likely to miss the appointment."
+)
+
+
+# --------------------------------------------------
+# Patient information
+# --------------------------------------------------
 
 st.subheader("Patient Information")
 
@@ -95,9 +123,14 @@ scheduled_hour = st.number_input(
     value=10
 )
 
-if st.button("Predict"):
 
-    data = {
+# --------------------------------------------------
+# Prediction
+# --------------------------------------------------
+
+if st.button("Predict", type="primary"):
+
+    input_data = pd.DataFrame([{
         "Gender": gender,
         "Age": age,
         "Neighbourhood": neighbourhood,
@@ -112,38 +145,27 @@ if st.button("Predict"):
         "appointment_day_of_week": appointment_day_of_week,
         "appointment_month": appointment_month,
         "scheduled_hour": scheduled_hour
-    }
+    }])
 
     try:
-        response = requests.post(
-            API_URL,
-            json=data
-        )
 
-        if response.status_code == 200:
+        prediction = model.predict(input_data)[0]
 
-            result = response.json()
+        probability = model.predict_proba(input_data)[0][1]
 
-            st.success("Prediction completed!")
+        if prediction == 1:
 
-            st.write(
-                "### Prediction:",
-                result["prediction_label"]
-            )
-
-            st.write(
-                "### Probability:",
-                f'{result["probability"]:.2%}'
-            )
+            st.error("Prediction: No-show")
 
         else:
-            st.error(
-                f"API Error: {response.status_code}"
-            )
 
-    except requests.exceptions.ConnectionError:
+            st.success("Prediction: Show")
 
-        st.error(
-            "Could not connect to FastAPI. "
-            "Please make sure the FastAPI server is running."
+        st.metric(
+            "No-show Probability",
+            f"{probability:.2%}"
         )
+
+    except Exception as e:
+
+        st.error(f"Prediction error: {e}")
