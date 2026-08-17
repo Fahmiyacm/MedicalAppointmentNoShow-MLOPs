@@ -7,3 +7,5 @@ scikit-learn
 joblib
 pytest
 httpx
+streamlit
+requests
