@@ -261,7 +261,7 @@ Machine Learning Model
     ↓
 Prediction
 
-10. Building the Docker Image
+# 10. Building the Docker Image
 
 The Docker image was built using:
 
@@ -278,7 +278,7 @@ Required source files
 The image can be viewed using:
 
 docker images
-11. Running the Docker Container
+# 11. Running the Docker Container
 
 The Docker container can be started using:
 
@@ -334,7 +334,7 @@ pytest -v
 
 The test suite checks that the API responds correctly to valid requests.
 
-14. Continuous Integration – GitHub Actions
+# 14. Continuous Integration – GitHub Actions
 
 GitHub Actions is used to automatically run tests whenever code is pushed to GitHub or a pull request is created.
 
@@ -350,7 +350,7 @@ Installs project dependencies.
 Checks the project structure.
 Configures PYTHONPATH.
 Runs the Pytest test suite.
-15. GitHub Actions CI Workflow
+# 15. GitHub Actions CI Workflow
 
 The CI workflow is:
 
@@ -399,7 +399,7 @@ jobs:
           PYTHONPATH: ${{ github.workspace }}
         run: |
           python -m pytest -v
-16. How CI Works
+# 16. How CI Works
 
 Whenever code is pushed:
 
@@ -427,7 +427,7 @@ If a test fails, the workflow fails and the developer can inspect the logs to id
 
 This provides automated validation of the project whenever changes are pushed.
 
-17. CI Test Result
+# 17. CI Test Result
 
 The GitHub Actions workflow successfully executed the test suite.
 
